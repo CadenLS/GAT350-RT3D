@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{43744f3c-51f6-4de1-944b-2ecd5c2e37d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -13,10 +16,42 @@
     <ClCompile Include="World01.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="World02.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="World03.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="World01.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="World02.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="World03.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Build\Assets\Shaders\unlit_color.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_color.prog">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_color.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_texture.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_texture.prog">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_texture.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

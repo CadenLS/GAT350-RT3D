@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Source\ImGui">
+      <UniqueIdentifier>{f2342d99-0192-4238-b3d3-4fbab9fc3c70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -16,14 +19,41 @@
     <ClCompile Include="Font.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ThirdParty\glad\src\glad.c">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Program.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui_draw.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui_impl_sdl.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui_impl_sdlrenderer.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui_tables.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ThirdParty\imgui\imgui_widgets.cpp">
+      <Filter>Source\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,10 +66,16 @@
     <ClInclude Include="Font.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Text.h">
+    <ClInclude Include="Texture.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Shader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Program.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

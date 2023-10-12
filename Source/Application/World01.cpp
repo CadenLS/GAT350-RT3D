@@ -32,8 +32,8 @@ namespace nc
         // render
         glPushMatrix();
         glTranslatef(m_position.x, m_position.y, 0); //move shape
-        //glRotatef(m_angle, 1, 1, 0); //rotate shape
-        glScalef((sin(m_time * 5) + 1) * 0.5f, 1, 1);
+        glRotatef(m_angle, 1, 1, 1); //rotate shape
+        //glScalef((sin(m_time * 5) + 1) * 0.5f, 1, 1);
 
         glBegin(GL_TRIANGLE_STRIP);
 

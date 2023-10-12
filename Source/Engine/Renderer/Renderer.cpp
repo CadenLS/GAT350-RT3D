@@ -5,6 +5,10 @@
 
 namespace nc
 {
+
+	void APIENTRY DebugCallback(GLenum source, GLenum type, GLuint id,
+		GLenum severity, GLsizei length, const GLchar* message, const void* param);
+
 	bool Renderer::Initialize()
 	{
 		SDL_Init(SDL_INIT_VIDEO);
@@ -17,6 +21,7 @@ namespace nc
 	void Renderer::Shutdown()
 	{
 		SDL_GL_DeleteContext(m_context);
+		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyWindow(m_window);
 		TTF_Quit();
 		IMG_Quit();
@@ -30,23 +35,26 @@ namespace nc
 		m_window = SDL_CreateWindow(title.c_str(), 100, 100, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-		
-		
+
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
 		SDL_GL_SetSwapInterval(1);
 
 		m_context = SDL_GL_CreateContext(m_window);
 		gladLoadGL();
 
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(DebugCallback, 0);
+
 		glViewport(0, 0, width, height);
+		//m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	}
 
 	void Renderer::BeginFrame()
 	{
+		//SDL_RenderClear(m_renderer);
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
@@ -54,6 +62,7 @@ namespace nc
 	void Renderer::EndFrame()
 	{
 		SDL_GL_SwapWindow(m_window);
+		//SDL_RenderPresent(m_renderer);
 	}
 
 	void Renderer::SetColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
@@ -81,70 +90,82 @@ namespace nc
 		SDL_RenderDrawPointF(m_renderer, x, y);
 	}
 
-	void Renderer::DrawTexture(Texture* texture, float x, float y, float angle)
-	{
-		vec2 size = texture->GetSize();
+	void APIENTRY DebugCallback(GLenum source, GLenum type, GLuint id,
+		GLenum severity, GLsizei length, const GLchar* message, const void* param) {
 
-		SDL_Rect dest;
-		dest.x = (int)(x - (size.x * 0.5f));
-		dest.y = (int)(y - (size.y * 0.5f));
-		dest.w = (int)size.x;
-		dest.h = (int)size.y;
+		std::string sourceString;
+		switch (source)
+		{
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			sourceString = "WindowSys";
+			break;
+		case GL_DEBUG_SOURCE_APPLICATION:
+			sourceString = "App";
+			break;
+		case GL_DEBUG_SOURCE_API:
+			sourceString = "OpenGL";
+			break;
+		case GL_DEBUG_SOURCE_SHADER_COMPILER:
+			sourceString = "ShaderCompiler";
+			break;
+		case GL_DEBUG_SOURCE_THIRD_PARTY:
+			sourceString = "3rdParty";
+			break;
+		case GL_DEBUG_SOURCE_OTHER:
+			sourceString = "Other";
+			break;
+		default:
+			sourceString = "Unknown";
+		}
 
-		// https://wiki.libsdl.org/SDL2/SDL_RenderCopyEx
-		SDL_RenderCopyEx(m_renderer, texture->m_texture, nullptr, &dest, angle, nullptr, SDL_FLIP_NONE);
-	}
+		std::string typeString;
+		switch (type)
+		{
+		case GL_DEBUG_TYPE_ERROR:
+			typeString = "Error";
+			break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			typeString = "Deprecated";
+			break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			typeString = "Undefined";
+			break;
+		case GL_DEBUG_TYPE_PORTABILITY:
+			typeString = "Portability";
+			break;
+		case GL_DEBUG_TYPE_PERFORMANCE:
+			typeString = "Performance";
+			break;
+		case GL_DEBUG_TYPE_MARKER:
+			typeString = "Marker";
+			break;
+		case GL_DEBUG_TYPE_PUSH_GROUP:
+			typeString = "PushGrp";
+			break;
+		case GL_DEBUG_TYPE_POP_GROUP:
+			typeString = "PopGrp";
+			break;
+		case GL_DEBUG_TYPE_OTHER:
+			typeString = "Other";
+			break;
+		default:
+			typeString = "Unknown";
+		}
 
-	void Renderer::DrawTexture(Texture* texture, const Transform& transform)
-	{
-		mat3 mx = transform.GetMatrix();
-
-		vec2 position = mx.GetTranslation();
-		vec2 size = texture->GetSize() * mx.GetScale();
-
-		SDL_Rect dest;
-		dest.x = (int)(position.x - (size.x * 0.5f));
-		dest.y = (int)(position.y - (size.y * 0.5f));
-		dest.w = (int)size.x;
-		dest.h = (int)size.y;
-
-		// https://wiki.libsdl.org/SDL2/SDL_RenderCopyEx
-		SDL_RenderCopyEx(m_renderer, texture->m_texture, nullptr, &dest, RadiansToDegrees(mx.GetRotation()), nullptr, SDL_FLIP_NONE);
-	}
-
-	void Renderer::DrawTexture(Texture* texture, const Rect& source, const Transform& transform)
-	{
-		mat3 mx = transform.GetMatrix();
-
-		vec2 position = mx.GetTranslation();
-		vec2 size = vec2{ source.w, source.h } * mx.GetScale();
-
-		SDL_Rect dest;
-		dest.x = (int)(position.x - (size.x * 0.5f));
-		dest.y = (int)(position.y - (size.y * 0.5f));
-		dest.w = (int)size.x;
-		dest.h = (int)size.y;
-
-		// https://wiki.libsdl.org/SDL2/SDL_RenderCopyEx
-		SDL_RenderCopyEx(m_renderer, texture->m_texture, (SDL_Rect*)(&source), &dest, RadiansToDegrees(mx.GetRotation()), nullptr, SDL_FLIP_NONE);
-	}
-
-	void Renderer::DrawTexture(Texture* texture, const Rect& source, const Transform& transform, const vec2& origin, bool flipH)
-	{
-		mat3 mx = transform.GetMatrix();
-
-		vec2 position = mx.GetTranslation();
-		vec2 size = vec2{ source.w, source.h } *mx.GetScale();
-
-		SDL_Rect dest;
-		dest.x = (int)(position.x - (size.x * origin.x));
-		dest.y = (int)(position.y - (size.y * origin.y));
-		dest.w = (int)size.x;
-		dest.h = (int)size.y;
-
-		SDL_Point center{ (int)(size.x * origin.x), (int)(size.y * origin.y) };
-
-		// https://wiki.libsdl.org/SDL2/SDL_RenderCopyEx
-		SDL_RenderCopyEx(m_renderer, texture->m_texture, (SDL_Rect*)(&source), &dest, RadiansToDegrees(mx.GetRotation()), &center, (flipH) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:
+			ASSERT_LOG(0, "OPENGL Source: " << sourceString << " Type: " << typeString << "(" << id << ") | " << message);
+			break;
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			ERROR_LOG("OPENGL Source: " << sourceString << " Type: " << typeString << "(" << id << ") | " << message);
+			break;
+		case GL_DEBUG_SEVERITY_LOW:
+			WARNING_LOG("OPENGL Source: " << sourceString << " Type: " << typeString << "(" << id << ") | " << message);
+			break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION:
+			INFO_LOG("OPENGL Source: " << sourceString << " Type: " << typeString << "(" << id << ") | " << message);
+			break;
+		}
 	}
 }

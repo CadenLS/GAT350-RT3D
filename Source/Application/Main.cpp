@@ -1,4 +1,6 @@
 #include "World01.h"
+#include "World02.h"
+#include "World03.h"
 #include "Core/Core.h"
 #include "Framework/Framework.h"
 #include "Renderer/Renderer.h"
@@ -9,13 +11,13 @@ int main(int argc, char* argv[])
 {
 	INFO_LOG("Initialize Engine...")
 
-	nc::MemoryTracker::Initialize();
+	//nc::MemoryTracker::Initialize();
 	nc::seedRandom((unsigned int)time(nullptr));
 	nc::setFilePath("assets");
 
 	ENGINE.Initialize();
 
-	auto world = make_unique<nc::World01>();
+	auto world = make_unique<nc::World03>();
 	world->Initialize();
 
 	// main loop
