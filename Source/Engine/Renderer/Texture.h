@@ -14,9 +14,9 @@ namespace nc
 		virtual bool Create(std::string filename, ...) override;
 
 		bool Load(const std::string& filename, class Renderer& renderer);
-		const glm::ivec2& GetSize() const { return m_size; }
+		const glm::ivec2 GetSize() const { return m_size; };
 
-		void SetActive(GLuint uint) { glActiveTexture(uint); }
+		void SetActive(GLuint unit) { glActiveTexture(unit); }
 		void Bind() { glBindTexture(m_target, m_texture); }
 
 		friend class Renderer;
